@@ -7,6 +7,8 @@ from langchain_community.document_loaders import CSVLoader
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain_community.llms import Ollama
 
+from langchain.memory import ChatMessageHistory, ConversationBufferMemory
+
 print(f'\n\nHi! There is RAG for csv based on chromadb as vectordb and llama2 as LLM.\nPlease, <cd> to workfolder for creating local vactordb inside. If you choose your directory then input your CSV file path here...\n!!!CAUTION!!!\t If the csv file is too large, it will take a long time to embed all the data.')
 CSV_PATH = input()
 
@@ -37,10 +39,25 @@ create_folder_for_db(name)
 chromadb = Chroma.from_documents(chunks, embedings, persist_directory = name, collection_name = name)
 
 
-MODEL = 'llama2'
-model = Ollama(model=MODEL)
-retriever = chromadb.as_retriever()
+message_history = ChatMessageHistory()
 
+memory = ConversationBufferMemory(
+    memory_key="chat_history",
+    output_key="answer",
+    chat_memory=message_history,
+    return_messages=True,
+)
+
+from langchain.chains import ConversationalRetrievalChain
+from langchain_community.chat_models import ChatOllama
+
+chain = ConversationalRetrievalChain.from_llm(
+    ChatOllama(model="llama2"),
+    chain_type="stuff",
+    retriever=chromadb.as_retriever(),
+    memory=memory,
+    return_source_documents=True,
+)
 
 loop = True
 while loop == True:
@@ -48,8 +65,6 @@ while loop == True:
     if query == 'exit':
         break
     else:
-        source = chromadb.similarity_search(query=query)
-        answer = model.invoke(f'based on this information: {[chunk.page_content for chunk in source]}')
-        print(f"Answer: {answer}\n\n\n")
-        # print(f"History: {history}")
+        res = chain.invoke(query)
+        print(res['answer'])
 print('Goodbye!')
