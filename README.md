@@ -3,11 +3,12 @@
 ## stack: ollama, chromadb
 
 To start application fallow this steps:
-1. Select the folder where you want to place the application -> ```cd rag_llm-chroma/```
+1. Select the folder where you want to place the application -> ```cd /..```
 2. Clone repo -> ```git clone https://github.com/CodyLikeSo/RAG_llm-chroma.git```
-3. Install packages from requirements.txt -> ```pip install -r requirements.txt```
-4. ```pip install ollama``` -> ```ollama pull llama2``` -> ```ollama pull all-minilm``` for local llm and embeddings
-5. start -> ```python application.py```
+3. -> ```cd rag_llm-chroma/```
+4. Install packages from requirements.txt -> ```pip install -r requirements.txt```
+5. ```pip install ollama``` -> ```ollama pull llama2``` -> ```ollama pull all-minilm``` for local llm and embeddings
+6. start -> ```python application.py```
 
 ### Thoughts
 Retrieval-Augmented Generation (RAG) is cool because:
