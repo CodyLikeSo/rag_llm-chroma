@@ -9,9 +9,18 @@ from langchain_community.llms import Ollama
 
 from langchain.memory import ChatMessageHistory, ConversationBufferMemory
 
-print(f'\n\nHi! There is RAG for csv based on chromadb as vectordb and llama2 as LLM.\nPlease, <cd> to workfolder for creating local vactordb inside. If you choose your directory then input your CSV file path here...\n!!!CAUTION!!!\t If the csv file is too large, it will take a long time to embed all the data.')
-CSV_PATH = input()
+print(f'\n\nHi! There is RAG for csv based on chromadb as vectordb and llama2 as LLM.\n!!!CAUTION!!!\t If the csv file is too large, it will take a long time to embed all the data.\n\n\n')
 
+import sys
+import os
+
+CSV_PATH = input("Enter the path to the CSV file: ")
+
+if os.path.exists(CSV_PATH):
+    pass
+else:
+    print("File does not exist!")
+    sys.exit()
 
 
 loader = CSVLoader(CSV_PATH)
